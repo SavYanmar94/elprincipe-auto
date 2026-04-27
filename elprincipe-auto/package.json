@@ -1,0 +1,14 @@
+{
+  "name": "elprincipe-auto",
+  "version": "1.0.0",
+  "description": "El Principe Garage - Auto in vendita sincronizzate da Subito.it",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "dev": "netlify dev"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.0.0"
+  }
+}

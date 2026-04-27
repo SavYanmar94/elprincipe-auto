@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vendita Auto Usate – El Principe Garage</title>
+  <meta name="description" content="Auto usate in vendita da El Principe Garage a Modugno (BA). Aggiornate automaticamente da Subito.it." />
+
+  <!-- Font identico al sito: Oswald + Lato -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── RESET ─── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #c8963e;
+      --gold-dark: #a87830;
+      --black:     #111111;
+      --dark:      #1a1a1a;
+      --white:     #ffffff;
+      --offwhite:  #f8f8f8;
+      --text:      #222222;
+      --text-light:#666666;
+      --border:    #e0e0e0;
+      --shadow:    0 2px 16px rgba(0,0,0,0.10);
+      --radius:    4px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ─── HEADER (stile El Principe) ─── */
+    header {
+      background: var(--black);
+      padding: 0 clamp(1rem, 6vw, 5rem);
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--white);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .logo-crown {
+      font-size: 1.1rem;
+      color: var(--gold);
+    }
+
+    nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    nav a {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--white); }
+    nav a.active {
+      color: var(--white);
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 2px;
+    }
+
+    /* ─── HERO (foto sfocata auto + titolo bold) ─── */
+    .hero {
+      background: var(--dark);
+      position: relative;
+      min-height: 240px;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background-image: url('https://images.sbito.it/api/v1/sbt-ads-images-pro/images/32/324871c4-4627-4021-a3a0-2eee8538f617?rule=large-auto');
+      background-size: cover;
+      background-position: center;
+      filter: brightness(0.28) blur(2px);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      padding: 3rem clamp(1rem, 6vw, 5rem);
+    }
+    .hero h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+    .hero h1 span { color: var(--gold); }
+
+    /* ─── INTRO SECTION ─── */
+    .intro {
+      background: var(--white);
+      text-align: center;
+      padding: 3rem clamp(1rem, 10vw, 20%);
+      border-bottom: 1px solid var(--border);
+    }
+    .intro h2 {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+    .intro p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      line-height: 1.75;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* ─── STATUS BAR ─── */
+    .status-bar {
+      background: var(--offwhite);
+      border-bottom: 1px solid var(--border);
+      padding: 0.6rem clamp(1rem, 6vw, 5rem);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.78rem;
+      color: var(--text-light);
+      flex-wrap: wrap;
+    }
+    .status-dot {
+      display: flex; align-items: center; gap: 5px;
+    }
+    .dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #ccc;
+    }
+    .dot.green { background: #22c55e; box-shadow: 0 0 6px #22c55e88; }
+    .dot.loading { background: var(--gold); animation: pulse 1s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+
+    #status-count { font-weight: 700; color: var(--text); }
+
+    .btn-refresh {
+      margin-left: auto;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      padding: 4px 12px;
+      border-radius: var(--radius);
+      font-size: 0.75rem;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      display: flex; align-items: center; gap: 5px;
+      transition: all .2s;
+    }
+    .btn-refresh:hover { border-color: var(--gold); color: var(--text); }
+
+    /* ─── GRID ─── */
+    .grid-section {
+      padding: 3rem clamp(1rem, 6vw, 5rem) 5rem;
+      background: var(--white);
+    }
+
+    .cars-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.8rem;
+    }
+
+    /* ─── CARD (identica alle card del sito originale) ─── */
+    .car-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+      transition: box-shadow .25s, transform .25s;
+      animation: fadeUp .35s ease both;
+    }
+    .car-card:hover {
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      transform: translateY(-3px);
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(18px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .car-card:nth-child(1){animation-delay:.04s}
+    .car-card:nth-child(2){animation-delay:.08s}
+    .car-card:nth-child(3){animation-delay:.12s}
+    .car-card:nth-child(4){animation-delay:.16s}
+    .car-card:nth-child(5){animation-delay:.20s}
+    .car-card:nth-child(6){animation-delay:.24s}
+    .car-card:nth-child(7){animation-delay:.28s}
+    .car-card:nth-child(8){animation-delay:.32s}
+
+    /* Immagine */
+    .card-img-wrap {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #eee;
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform .4s ease;
+    }
+    .car-card:hover .card-img-wrap img { transform: scale(1.04); }
+
+    /* Bottone SCOPRI DI PIÙ sopra l'immagine (al hover) — stile esatto sito */
+    .card-btn-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: var(--gold);
+      color: var(--white);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 10px 0;
+      transform: translateY(0);
+      transition: background .2s;
+    }
+    .car-card:hover .card-btn-overlay { background: var(--gold-dark); }
+
+    /* Body */
+    .card-body {
+      padding: 1rem 1.1rem 1.2rem;
+      flex: 1;
+    }
+    .card-title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .card-price {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.01em;
+      margin-bottom: 10px;
+    }
+    .card-specs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .spec-tag {
+      background: var(--offwhite);
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 0.72rem;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+    .card-date {
+      margin-top: 8px;
+      font-size: 0.7rem;
+      color: #aaa;
+    }
+
+    /* Placeholder immagine mancante */
+    .no-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
+      background: #f0f0f0; color: #bbb; font-size: 2.5rem;
+    }
+
+    /* ─── SKELETON ─── */
+    .skeleton {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+    .skel-img {
+      aspect-ratio: 4/3;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.3s infinite;
+    }
+    .skel-body { padding: 1rem; display:flex; flex-direction:column; gap:8px; }
+    .skel-line {
+      height: 13px; border-radius: 3px;
+      background: linear-gradient(90deg, #f0f0f0 25%, #e8e8e8 50%, #f0f0f0 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.3s infinite;
+    }
+    .skel-line.lg { height:18px; width:75%; }
+    .skel-line.sm { height:10px; width:45%; }
+    @keyframes shimmer {
+      0%  { background-position: 200% 0; }
+      100%{ background-position: -200% 0; }
+    }
+
+    /* ─── EMPTY / ERROR ─── */
+    .msg-box {
+      grid-column: 1/-1;
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--text-light);
+    }
+    .msg-box .icon { font-size: 3rem; margin-bottom: 1rem; }
+    .msg-box h3 { font-family:'Oswald',sans-serif; font-size:1.2rem; color:var(--text); margin-bottom:.5rem; }
+    .msg-box a { color: var(--gold); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--black);
+      padding: 2.5rem clamp(1rem, 6vw, 5rem);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo {
+      font-family: 'Oswald', sans-serif;
+      font-size: 1.2rem;
+      color: var(--white);
+      letter-spacing: .06em;
+    }
+    .footer-logo span { color: var(--gold); }
+    footer p { font-size: 0.78rem; color: #666; }
+    footer a { color: #888; text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+    .footer-subito {
+      font-size: 0.72rem;
+      color: #555;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .subito-pill {
+      background: #f75a0f;
+      color: white;
+      font-size: 0.62rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media(max-width:640px){
+      nav { display:none; }
+      .cars-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+    }
+    @media(max-width:400px){
+      .cars-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <a class="logo" href="https://elprincipegarage.com" target="_blank">
+      <span class="logo-crown">♛</span> El Principe
+    </a>
+    <nav>
+      <a href="https://elprincipegarage.com" target="_blank">Home</a>
+      <a href="https://elprincipegarage.com/chi-siamo" target="_blank">Chi siamo</a>
+      <a href="https://elprincipegarage.com/servizi" target="_blank">Servizi</a>
+      <a href="#" class="active">Vendita Auto</a>
+      <a href="https://elprincipegarage.com/contatti" target="_blank">Contatti</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <h1>Modelli Vendita<br>Auto <span>Usato</span></h1>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section class="intro">
+    <h2>Le nostre occasioni</h2>
+    <p>
+      Pur avendo diversi servizi legati al garage, la nostra attività ha a che fare ogni settimana
+      con diversi affari nella compravendita di auto usate. Controlla su questa pagina le occasioni
+      disponibili. Clicca sulle auto per scoprire tutti i dettagli. Qualora tu fossi interessato
+      all'acquisto contattaci via telefono, troverai il numero in basso alla pagina.
+    </p>
+  </section>
+
+  <!-- STATUS -->
+  <div class="status-bar">
+    <div class="status-dot">
+      <span class="dot loading" id="status-dot"></span>
+      <span id="status-msg">Caricamento…</span>
+    </div>
+    <span id="status-count"></span>
+    <span id="status-time"></span>
+    <button class="btn-refresh" onclick="loadCars()">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M1 4v6h6M23 20v-6h-6"/>
+        <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+      </svg>
+      Aggiorna
+    </button>
+  </div>
+
+  <!-- GRID AUTO -->
+  <section class="grid-section">
+    <div class="cars-grid" id="cars-grid">
+      <!-- Skeleton placeholder -->
+      <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line lg"></div><div class="skel-line"></div><div class="skel-line sm"></div></div></div>
+      <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line lg"></div><div class="skel-line"></div><div class="skel-line sm"></div></div></div>
+      <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line lg"></div><div class="skel-line"></div><div class="skel-line sm"></div></div></div>
+      <div class="skeleton"><div class="skel-img"></div><div class="skel-body"><div class="skel-line lg"></div><div class="skel-line"></div><div class="skel-line sm"></div></div></div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div>
+      <div class="footer-logo">♛ El <span>Principe</span> Garage</div>
+      <p style="margin-top:6px">Via Pordenone 17, Modugno (BA) · <a href="tel:+393201664894">+39 320 166 4894</a></p>
+    </div>
+    <div class="footer-subito">
+      Annunci sincronizzati da <span class="subito-pill">subito.it</span> · Aggiornamento automatico giornaliero
+    </div>
+  </footer>
+
+  <script>
+    async function loadCars() {
+      const grid  = document.getElementById('cars-grid');
+      const dot   = document.getElementById('status-dot');
+      const msg   = document.getElementById('status-msg');
+      const cnt   = document.getElementById('status-count');
+      const time  = document.getElementById('status-time');
+
+      // Skeleton
+      grid.innerHTML = Array(4).fill(`
+        <div class="skeleton">
+          <div class="skel-img"></div>
+          <div class="skel-body">
+            <div class="skel-line lg"></div>
+            <div class="skel-line"></div>
+            <div class="skel-line sm"></div>
+          </div>
+        </div>`).join('');
+      dot.className = 'dot loading';
+      msg.textContent = 'Caricamento annunci…';
+      cnt.textContent = '';
+      time.textContent = '';
+
+      try {
+        // Legge il JSON statico generato dallo scraper (no API call, istantaneo)
+        const res  = await fetch('./cars.json?t=' + Date.now());
+        const data = await res.json();
+
+        grid.innerHTML = '';
+
+        if (!data.success || !data.cars || data.cars.length === 0) {
+          grid.innerHTML = `
+            <div class="msg-box">
+              <div class="icon">🚗</div>
+              <h3>Nessun annuncio disponibile</h3>
+              <p>Riprova tra poco o consulta direttamente
+                <a href="https://impresapiu.subito.it/shops/54233-el-principe-di-bavaro-biagio" target="_blank">
+                  la nostra pagina su Subito.it →
+                </a>
+              </p>
+            </div>`;
+          dot.className = 'dot';
+          msg.textContent = 'Nessun annuncio';
+          return;
+        }
+
+        data.cars.forEach(car => grid.appendChild(buildCard(car)));
+
+        dot.className = 'dot green';
+        msg.textContent = 'Annunci aggiornati';
+        cnt.textContent = data.cars.length + ' auto disponibili';
+
+        if (data.updated) {
+          const d = new Date(data.updated);
+          time.textContent = 'Aggiornato: ' + d.toLocaleDateString('it-IT', {day:'2-digit',month:'2-digit',year:'numeric'});
+        }
+
+      } catch (err) {
+        grid.innerHTML = `
+          <div class="msg-box">
+            <div class="icon">⚠️</div>
+            <h3>Errore di caricamento</h3>
+            <p>
+              <a href="https://impresapiu.subito.it/shops/54233-el-principe-di-bavaro-biagio" target="_blank">
+                Visualizza gli annunci su Subito.it →
+              </a>
+            </p>
+          </div>`;
+        dot.className = 'dot';
+        msg.textContent = 'Errore';
+        console.error(err);
+      }
+    }
+
+    function buildCard(car) {
+      const a = document.createElement('a');
+      a.className = 'car-card';
+      a.href = car.url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+
+      const imgHtml = car.imageUrl
+        ? `<img src="${car.imageUrl}" alt="${car.title}" loading="lazy"
+               onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'no-img-placeholder',textContent:'🚗'}))">`
+        : `<div class="no-img-placeholder">🚗</div>`;
+
+      const specs = [car.km, car.year, car.fuel, car.transmission]
+        .filter(Boolean)
+        .map(s => `<span class="spec-tag">${s}</span>`)
+        .join('');
+
+      const dateHtml = car.publishDate
+        ? `<div class="card-date">${car.publishDate}</div>` : '';
+
+      a.innerHTML = `
+        <div class="card-img-wrap">
+          ${imgHtml}
+          <div class="card-btn-overlay">Scopri di più</div>
+        </div>
+        <div class="card-body">
+          <div class="card-title">${car.title}</div>
+          <div class="card-price">${car.price}</div>
+          <div class="card-specs">${specs}</div>
+          ${dateHtml}
+        </div>`;
+
+      return a;
+    }
+
+    document.addEventListener('DOMContentLoaded', loadCars);
+  </script>
+</body>
+</html>
